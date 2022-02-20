@@ -5,8 +5,10 @@
 > [![For LiteLoaderBDS](https://img.shields.io/badge/LiteLoaderBDS-orange)](https://github.com/LiteLDev/LiteLoaderBDS)
 
 ## **已实现**
+- [x] 功能开关可配置
 - [x] 聊天内容过滤
 - [x] 私聊内容过滤
+- [x] 聊天前缀自定义
 ## **待实现**
 - [ ] 监控服务器运行状态
 - [ ] 假人控制系统
