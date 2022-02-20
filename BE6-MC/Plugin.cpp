@@ -12,6 +12,7 @@
 #include "trie.h"
 #include <regex>
 using nlohmann::json;
+using namespace std;
 Logger logger("BE6-CLOUD");
 Trie trie;
 json ChatConfig{
@@ -31,15 +32,15 @@ string ChatPath = RootPath + "Chat/";
 string WordPath = ChatPath + "Word.txt";
 string ChatFile = "chat.json";
 void loadConfig(string ConfigPath,string ConfigFile,json &Config) {
-    std::ifstream _ConfigFile;
+    ifstream _ConfigFile;
 	json _Config;
 	logger.info("加载{0}中...", ConfigPath + ConfigFile);
     _ConfigFile.open(ConfigPath+ConfigFile, std::ios::in);
     if (!_ConfigFile) {
 		CreateDirs(ConfigPath);
-		std::ofstream of(ConfigPath + ConfigFile);
+		ofstream of(ConfigPath + ConfigFile);
 		if (of) { 
-			of << std::setw(4) << Config << std::endl;
+			of << setw(4) << Config << std::endl;
 			logger.info("创建{0}配置文件成功！！！", ConfigPath + ConfigFile);
 			of.close();
 		}
@@ -74,30 +75,34 @@ string getPlayerMode(GameType in) {
 }
 void loadEvent() {
 	Event::PlayerChatEvent::subscribe_ref([](Event::PlayerChatEvent& ev) {
-		std::string msg = ev.mMessage;
+		string msg = ev.mMessage;
 		auto pl = ev.mPlayer;
 		if (ChatFilter)
 		{
-			std::wstring result = trie.replaceSensitive(SBCConvert::s2ws(msg));
+			wstring result = trie.replaceSensitive(SBCConvert::s2ws(msg));
 			ev.mMessage = SBCConvert::ws2s(result);
 		}		
 		if (ChatPrefix) {
-			string _msg = ChatMsg;//{SCOREITEM=BE6_die}
-			std::regex SCORE("\\{SCOREITEM=([^}\n\s]+)\\}");
-			std::smatch score;
-			std::regex_search(_msg, score, SCORE);
-			for (int i = 1; i < score.size(); i++)
-			{
-				logger.info(score.str(i));
-				ReplaceStr(_msg, "{SCOREITEM="+ score.str(i) +"}", std::to_string(pl->getScore(score.str(i))));
+			string _msg = ChatMsg;//[挖掘数:{SCOREITEM=BE6_BrixBuster}][暴毙数:{SCOREITEM=BE6_die}]	
+			vector<string> scores;
+			regex SCORE("\\{SCOREITEM=([^}]*)\\}");
+			sregex_iterator pos(_msg.cbegin(), _msg.cend(), SCORE); 
+			sregex_iterator end;
+			for (; pos != end; pos++) {
+				scores.push_back(pos->str(1));
+				logger.info(pos->str(1));
+				
+			}
+			for (vector<string>::iterator itr = scores.begin(); itr != scores.end(); ++itr) {
+				ReplaceStr(_msg, "{SCOREITEM=" + *itr + "}", std::to_string(pl->getScore(*itr)));
 			}
 			ReplaceStr(_msg, "{NAME}", pl->getRealName());
-			ReplaceStr(_msg, "{PING}", std::to_string(pl->getAvgPing()));
-			ReplaceStr(_msg, "{LEVEL}", std::to_string(pl->getPlayerLevel()));
+			ReplaceStr(_msg, "{PING}", to_string(pl->getAvgPing()));
+			ReplaceStr(_msg, "{LEVEL}", to_string(pl->getPlayerLevel()));
 			ReplaceStr(_msg, "{MODE}", getPlayerMode(pl->getPlayerGameType()));
 			ReplaceStr(_msg, "{DIMID}", getPlayerDimid(pl->getDimensionId()));
 			ReplaceStr(_msg, "{SYSTEM}", pl->getDeviceName());
-			ReplaceStr(_msg, "{HEALTH}", std::to_string(pl->getHealth()) + "/" + std::to_string(pl->getMaxHealth()));
+			ReplaceStr(_msg, "{HEALTH}", to_string(pl->getHealth()) + "/" + to_string(pl->getMaxHealth()));
 			ReplaceStr(_msg, "{MSG}", ev.mMessage);
 			Level::broadcastText(_msg, TextType::RAW);
 			return false;
