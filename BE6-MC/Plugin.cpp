@@ -54,6 +54,15 @@ void loadConfig(string ConfigPath,string ConfigFile,json &Config) {
 		_ConfigFile.close();
 	}
 }
+string getPlayerDimid(int in) {
+	string s[4] = {
+		"§4未知§r",
+		"§2主世界§r",
+		"§5下界§r",
+		"§9末地§r"
+	};
+	return s[in+1];
+}
 string getPlayerMode(GameType in) {
 	string s[4] = {
 		"§2生存§r",
@@ -71,13 +80,22 @@ void loadEvent() {
 		{
 			std::wstring result = trie.replaceSensitive(SBCConvert::s2ws(msg));
 			ev.mMessage = SBCConvert::ws2s(result);
-		}
+		}		
 		if (ChatPrefix) {
-			string _msg = ChatMsg;
+			string _msg = ChatMsg;//{SCOREITEM=BE6_die}
+			std::regex SCORE("\\{SCOREITEM=([^}\n\s]+)\\}");
+			std::smatch score;
+			std::regex_search(_msg, score, SCORE);
+			for (int i = 1; i < score.size(); i++)
+			{
+				logger.info(score.str(i));
+				ReplaceStr(_msg, "{SCOREITEM="+ score.str(i) +"}", std::to_string(pl->getScore(score.str(i))));
+			}
 			ReplaceStr(_msg, "{NAME}", pl->getRealName());
 			ReplaceStr(_msg, "{PING}", std::to_string(pl->getAvgPing()));
 			ReplaceStr(_msg, "{LEVEL}", std::to_string(pl->getPlayerLevel()));
 			ReplaceStr(_msg, "{MODE}", getPlayerMode(pl->getPlayerGameType()));
+			ReplaceStr(_msg, "{DIMID}", getPlayerDimid(pl->getDimensionId()));
 			ReplaceStr(_msg, "{SYSTEM}", pl->getDeviceName());
 			ReplaceStr(_msg, "{HEALTH}", std::to_string(pl->getHealth()) + "/" + std::to_string(pl->getMaxHealth()));
 			ReplaceStr(_msg, "{MSG}", ev.mMessage);
