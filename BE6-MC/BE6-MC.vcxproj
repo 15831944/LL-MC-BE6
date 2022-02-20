@@ -74,9 +74,8 @@ LibraryBuilder.exe -o ..\Lib\
 			</Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>if exist $(LocalDebuggerWorkingDirectory)\plugins\ (
-copy /Y $(TargetPath) $(LocalDebuggerWorkingDirectory)\plugins\
-)</Command>
+      <Command>copy /Y $(TargetPath) H:\MC_LL\MC_TEST\plugins\
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
