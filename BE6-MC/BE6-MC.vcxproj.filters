@@ -27,6 +27,18 @@
     <ClInclude Include="trie.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="res.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Tools.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -42,6 +54,18 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="trie.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Event.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Tools.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="res.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

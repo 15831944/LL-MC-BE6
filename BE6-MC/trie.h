@@ -11,6 +11,8 @@
 
 #include "sbc_convert.h"
 
+#ifndef	 _Trie_
+#define  _Trie_
 /** @class trie
   * @brief trie树算法实现的敏感词过滤
   */
@@ -131,7 +133,7 @@ private:
     TrieNode *root_;
     std::unordered_set<uint16_t /*unicode*/ > stop_words_;
 };
-
+#endif
 //#define UNIT_TEST
 
 #ifdef UNIT_TEST
