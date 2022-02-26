@@ -27,7 +27,7 @@ string getPlayerDimid(int in) {
 	return s[in + 1];
 }
 string getPlayerIP(string ip) {
-	string lat, lng, dz;
+	string dz;
 	ip=SplitStrWithPattern(ip, ":")[0];
 	if (ip == "127.0.0.1" || SplitStrWithPattern(ip,".")[0] == "192") {
 		return "本地";
@@ -44,7 +44,6 @@ string getPlayerIP(string ip) {
 			string nation = date.at("result").at("ad_info").at("nation");
 			string province=date.at("result").at("ad_info").at("province");
 			dz = nation + province;
-			logger.info(dz);
 			if (nation != "中国") {
 				auto ncn = NCN.Get(("/" + ip + "/").c_str());
 				if (ncn) {
@@ -70,29 +69,29 @@ string getPlayerMode(GameType in) {
 void setPlayerMsg(string &msg, Player* pl) {
 	/*fmt::format(msg, fmt::arg("NAME", pl->getRealName()),
 		fmt::arg("PING", to_string(pl->getAvgPing())),
-		fmt::arg("{LEVEL}", to_string(pl->getPlayerLevel())),
-		fmt::arg("{MODE}", getPlayerMode(pl->getPlayerGameType())),
-		fmt::arg("{DIMID}", getPlayerDimid(pl->getDimensionId())),
-		fmt::arg("{SYSTEM}", pl->getDeviceName()),
-		fmt::arg("{POS_X}", to_string(pl->getPos().x)),
-		fmt::arg("{POS_Y}", to_string(pl->getPos().y)),
-		fmt::arg("{POS_Z}", to_string(pl->getPos().z)),
-		fmt::arg("{PLAYER_IP}", getPlayerIP(pl->getIP())),
-		fmt::arg("{HEALTH}", to_string(pl->getHealth())),
-		fmt::arg("{HEALTH_MAX}", to_string(pl->getMaxHealth()))
+		fmt::arg("LEVEL", to_string(pl->getPlayerLevel())),
+		fmt::arg("MODE", getPlayerMode(pl->getPlayerGameType())),
+		fmt::arg("DIMID", getPlayerDimid(pl->getDimensionId())),
+		fmt::arg("SYSTEM", pl->getDeviceName()),
+		fmt::arg("POS_X", to_string(pl->getPos().x)),
+		fmt::arg("POS_Y", to_string(pl->getPos().y)),
+		fmt::arg("POS_Z", to_string(pl->getPos().z)),
+		fmt::arg("PLAYER_IP", getPlayerIP(pl->getIP())),
+		fmt::arg("HEALTH", to_string(pl->getHealth())),
+		fmt::arg("HEALTH_MAX", to_string(pl->getMaxHealth()))
 	);*/
-	ReplaceStr(msg, "{NAME}", pl->getRealName());
-	ReplaceStr(msg, "{PING}", to_string(pl->getAvgPing()));
-	ReplaceStr(msg, "{LEVEL}", to_string(pl->getPlayerLevel()));
-	ReplaceStr(msg, "{MODE}", getPlayerMode(pl->getPlayerGameType()));
-	ReplaceStr(msg, "{DIMID}", getPlayerDimid(pl->getDimensionId()));
-	ReplaceStr(msg, "{SYSTEM}", pl->getDeviceName());
-	ReplaceStr(msg, "{POS_X}", to_string(pl->getPos().x));
-	ReplaceStr(msg, "{POS_Y}", to_string(pl->getPos().y));
-	ReplaceStr(msg, "{POS_Z}", to_string(pl->getPos().z));
-	ReplaceStr(msg, "{PLAYER_IP}", getPlayerIP(pl->getIP()));
-	ReplaceStr(msg, "{HEALTH}", to_string(pl->getHealth()));
-	ReplaceStr(msg, "{HEALTH_MAX}", to_string(pl->getMaxHealth()));
+	if (msg.find("{NAME}") != msg.npos)         ReplaceStr(msg, "{NAME}", pl->getRealName());
+	if (msg.find("{PING}") != msg.npos)         ReplaceStr(msg, "{PING}", to_string(pl->getAvgPing()));
+	if (msg.find("{LEVEL}") != msg.npos)        ReplaceStr(msg, "{LEVEL}", to_string(pl->getPlayerLevel()));
+	if (msg.find("{MODE}") != msg.npos)         ReplaceStr(msg, "{MODE}", getPlayerMode(pl->getPlayerGameType()));
+	if (msg.find("{DIMID}") != msg.npos)        ReplaceStr(msg, "{DIMID}", getPlayerDimid(pl->getDimensionId()));
+	if (msg.find("{SYSTEM}") != msg.npos)       ReplaceStr(msg, "{SYSTEM}", pl->getDeviceName());
+	if (msg.find("{POS_X}") != msg.npos)        ReplaceStr(msg, "{POS_X}", to_string(pl->getPos().x));
+	if (msg.find("{POS_Y}") != msg.npos)        ReplaceStr(msg, "{POS_Y}", to_string(pl->getPos().y));
+	if (msg.find("{POS_Z}") != msg.npos)        ReplaceStr(msg, "{POS_Z}", to_string(pl->getPos().z));
+	if (msg.find("{PLAYER_IP}") != msg.npos)    ReplaceStr(msg, "{PLAYER_IP}", getPlayerIP(pl->getIP()));
+	if (msg.find("{HEALTH}") != msg.npos)       ReplaceStr(msg, "{HEALTH}", to_string(pl->getHealth()));
+	if (msg.find("{HEALTH_MAX}") != msg.npos)   ReplaceStr(msg, "{HEALTH_MAX}", to_string(pl->getMaxHealth()));
 }
 string UnicodeToUTF8(string str)
 {

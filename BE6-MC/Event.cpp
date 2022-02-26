@@ -62,9 +62,9 @@ void LoadEvent() {
 		return true;
 	});
 	Event::PlayerJoinEvent::subscribe_ref([](Event::PlayerJoinEvent& ev) {
-		setPlayerMsg(JoinMsg, ev.mPlayer);
-		logger.info(JoinMsg);
-		Level::broadcastText(JoinMsg, TextType::RAW);
+		string msg = JoinMsg;
+		setPlayerMsg(msg, ev.mPlayer);
+		Level::broadcastText(msg, TextType::RAW);
 		return true;
 	});
 	logger.info("[Event] 监听已注册{}个！！！",4);
