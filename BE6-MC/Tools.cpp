@@ -5,6 +5,16 @@
 #include <iostream>
 #include <locale>
 #include <atlstr.h>
+#include <EventAPI.h>
+#include <MC/Level.hpp>
+#include <MC/BlockInstance.hpp>
+#include <MC/Block.hpp>
+#include <MC/BlockSource.hpp>
+#include <MC/Actor.hpp>
+#include <MC/Player.hpp>
+#include <MC/ItemStack.hpp>
+#include <LLAPI.h>
+#include <httplib/httplib.h>
 #include <regex>
 using namespace std;
 string getPlayerDimid(int in) {
@@ -16,6 +26,38 @@ string getPlayerDimid(int in) {
 	};
 	return s[in + 1];
 }
+string getPlayerIP(string ip) {
+	string lat, lng, dz;
+	ip=SplitStrWithPattern(ip, ":")[0];
+	if (ip == "127.0.0.1" || SplitStrWithPattern(ip,".")[0] == "192") {
+		return "本地";
+	}
+	string CN_Url = R"(/ws/location/v1/ip?output=json&key=KUQBZ-FYDCU-YMVVN-2DDW5-7WDYE-5JBJR&ip=)";
+	httplib::Client CN("apis.map.qq.com");
+	httplib::Client NCN("ipchaxun.com");
+	auto res = CN.Get((CN_Url + ip).c_str());
+	if (res) {
+		json date = json::parse(res->body);
+		if(date.count("status")){
+			//lat = to_string(date.at("result").at("location").at("lat"));
+			//lng = to_string(date.at("result").at("location").at("lng"));
+			string nation = date.at("result").at("ad_info").at("nation");
+			string province=date.at("result").at("ad_info").at("province");
+			dz = nation + province;
+			logger.info(dz);
+			if (nation != "中国") {
+				auto ncn = NCN.Get(("/" + ip + "/").c_str());
+				if (ncn) {
+					string data = SplitStrWithPattern(ncn->body, "\n")[64];
+					ReplaceStr(data, R"(<span class="name">归属地：</span><span class="value">)", "");
+					ReplaceStr(data, R"(</span>)", "");
+					dz = data;
+				}
+			}
+		}
+	}
+	return dz;
+}
 string getPlayerMode(GameType in) {
 	string s[4] = {
 		"§2生存§r",
@@ -24,6 +66,33 @@ string getPlayerMode(GameType in) {
 		"§9观察§r"
 	};
 	return s[in];
+}
+void setPlayerMsg(string &msg, Player* pl) {
+	/*fmt::format(msg, fmt::arg("NAME", pl->getRealName()),
+		fmt::arg("PING", to_string(pl->getAvgPing())),
+		fmt::arg("{LEVEL}", to_string(pl->getPlayerLevel())),
+		fmt::arg("{MODE}", getPlayerMode(pl->getPlayerGameType())),
+		fmt::arg("{DIMID}", getPlayerDimid(pl->getDimensionId())),
+		fmt::arg("{SYSTEM}", pl->getDeviceName()),
+		fmt::arg("{POS_X}", to_string(pl->getPos().x)),
+		fmt::arg("{POS_Y}", to_string(pl->getPos().y)),
+		fmt::arg("{POS_Z}", to_string(pl->getPos().z)),
+		fmt::arg("{PLAYER_IP}", getPlayerIP(pl->getIP())),
+		fmt::arg("{HEALTH}", to_string(pl->getHealth())),
+		fmt::arg("{HEALTH_MAX}", to_string(pl->getMaxHealth()))
+	);*/
+	ReplaceStr(msg, "{NAME}", pl->getRealName());
+	ReplaceStr(msg, "{PING}", to_string(pl->getAvgPing()));
+	ReplaceStr(msg, "{LEVEL}", to_string(pl->getPlayerLevel()));
+	ReplaceStr(msg, "{MODE}", getPlayerMode(pl->getPlayerGameType()));
+	ReplaceStr(msg, "{DIMID}", getPlayerDimid(pl->getDimensionId()));
+	ReplaceStr(msg, "{SYSTEM}", pl->getDeviceName());
+	ReplaceStr(msg, "{POS_X}", to_string(pl->getPos().x));
+	ReplaceStr(msg, "{POS_Y}", to_string(pl->getPos().y));
+	ReplaceStr(msg, "{POS_Z}", to_string(pl->getPos().z));
+	ReplaceStr(msg, "{PLAYER_IP}", getPlayerIP(pl->getIP()));
+	ReplaceStr(msg, "{HEALTH}", to_string(pl->getHealth()));
+	ReplaceStr(msg, "{HEALTH_MAX}", to_string(pl->getMaxHealth()));
 }
 string UnicodeToUTF8(string str)
 {

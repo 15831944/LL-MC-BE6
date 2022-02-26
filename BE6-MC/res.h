@@ -13,5 +13,6 @@ extern string RootPath;
 extern string ChatPath;
 extern string WordPath;
 extern string ChatFile;
-
+extern string Version;
+extern string JoinMsg;
 

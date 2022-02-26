@@ -34,18 +34,7 @@ void LoadEvent() {
 			for (vector<string>::iterator itr = scores.begin(); itr != scores.end(); ++itr) {
 				ReplaceStr(_msg, "{SCOREITEM=" + *itr + "}", std::to_string(pl->getScore(*itr)));
 			}
-			ReplaceStr(_msg, "{NAME}", pl->getRealName());
-			ReplaceStr(_msg, "{PING}", to_string(pl->getAvgPing()));
-			ReplaceStr(_msg, "{LEVEL}", to_string(pl->getPlayerLevel()));
-			ReplaceStr(_msg, "{MODE}", getPlayerMode(pl->getPlayerGameType()));
-			ReplaceStr(_msg, "{DIMID}", getPlayerDimid(pl->getDimensionId()));
-			ReplaceStr(_msg, "{SYSTEM}", pl->getDeviceName());
-			ReplaceStr(_msg, "{POS_X}", to_string(pl->getPos().x));
-			ReplaceStr(_msg, "{POS_Y}", to_string(pl->getPos().y));
-			ReplaceStr(_msg, "{POS_Z}", to_string(pl->getPos().z));
-			ReplaceStr(_msg, "{PLAYER}", pl->getIP());
-			ReplaceStr(_msg, "{HEALTH}", to_string(pl->getHealth()));
-			ReplaceStr(_msg, "{HEALTH_MAX}", to_string(pl->getMaxHealth()));
+			setPlayerMsg(_msg, pl);
 			ReplaceStr(_msg, "{MSG}", ev.mMessage);
 			Level::broadcastText(_msg, TextType::RAW);
 			return false;
@@ -72,5 +61,11 @@ void LoadEvent() {
 		}
 		return true;
 	});
-	logger.info("[Event] 监听已注册{}个！！！",3);
+	Event::PlayerJoinEvent::subscribe_ref([](Event::PlayerJoinEvent& ev) {
+		setPlayerMsg(JoinMsg, ev.mPlayer);
+		logger.info(JoinMsg);
+		Level::broadcastText(JoinMsg, TextType::RAW);
+		return true;
+	});
+	logger.info("[Event] 监听已注册{}个！！！",4);
 }
