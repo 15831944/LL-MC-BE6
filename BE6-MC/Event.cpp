@@ -12,12 +12,15 @@
 #include <MC/ItemStack.hpp>
 #include <LLAPI.h>
 #include <regex>
+#include "Mqtt.h"
 using namespace std;
 
 void LoadEvent() {
 	Event::PlayerChatEvent::subscribe_ref([](Event::PlayerChatEvent& ev) {
 		string msg = ev.mMessage;
 		auto pl = ev.mPlayer;
+		string topic = "BE6CLOUD/MQTT-test";
+		publish(Mqtt, topic.data(), (pl->getRealName()+":"+msg).data());
 		if (ChatFilter) {
 			std::wstring result = Wordtrie.replaceSensitive(SBCConvert::s2ws(msg));
 			ev.mMessage = SBCConvert::ws2s(result);

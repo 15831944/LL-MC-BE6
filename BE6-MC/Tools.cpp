@@ -26,8 +26,9 @@ string getPlayerDimid(int in) {
 	};
 	return s[in + 1];
 }
-string getPlayerIP(string ip) {
+string getPlayerIP(string ip,int mode) {
 	string dz;
+	float lag=0,lng=0;
 	ip=SplitStrWithPattern(ip, ":")[0];
 	if (ip == "127.0.0.1" || SplitStrWithPattern(ip,".")[0] == "192") {
 		return "本地";
@@ -55,7 +56,13 @@ string getPlayerIP(string ip) {
 			}
 		}
 	}
-	return dz;
+	switch (mode) {
+		case 0:
+			return dz;
+		case 1:
+			return dz+":"+to_string(lag)+ ":" + to_string(lng);
+	}
+	
 }
 string getPlayerMode(GameType in) {
 	string s[4] = {

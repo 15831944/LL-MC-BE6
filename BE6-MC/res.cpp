@@ -2,6 +2,7 @@
 #include "res.h"
 Logger logger("BE6-CLOUD");
 Trie Wordtrie;
+MQTTClient Mqtt;
 string LoadMsg = "\n"
 "+-+-+-+-+-+-+-+-+  ++++++++++++++++++++++++++++++++++++\n"
 "|B|E|6|C|L|O|U|D|  |！！！星海湾畔控制系统已加载！！！|\n"

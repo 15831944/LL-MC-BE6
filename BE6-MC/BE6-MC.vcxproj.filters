@@ -39,6 +39,15 @@
     <ClInclude Include="Tools.h">
       <Filter>Header</Filter>
     </ClInclude>
+    <ClInclude Include="FormCall.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="FormUI.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Mqtt.h">
+      <Filter>Header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -66,6 +75,15 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="res.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="FormCall.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="FormUI.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Mqtt.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

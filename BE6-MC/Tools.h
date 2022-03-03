@@ -11,5 +11,5 @@
 string getPlayerDimid(int in);
 string getPlayerMode(GameType in);
 string UnicodeStrToUtf8(const string& src);
-string getPlayerIP(string ip);
+string getPlayerIP(string ip, int mode = 0);
 void setPlayerMsg(string& _msg, Player* pl);
