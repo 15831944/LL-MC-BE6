@@ -17,6 +17,7 @@ extern string WordPath;
 extern string ChatFile;
 extern string Version;
 extern string JoinMsg;
+extern bool WorldChat;
 namespace BE6 {
 	struct playerAddress
 	{

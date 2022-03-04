@@ -12,7 +12,8 @@ string ChatPath = RootPath + "Chat/";
 string WordPath = ChatPath + "Word.txt";
 string ChatFile = "chat.json";
 nlohmann::json ChatConfig = {
-{ "Version", "1.1.5"},
+{ "Version", "1.1.6"},
+{ "WorldChat", true},
 { "ChatFilter", true},
 { "ChatPrefix", true},
 { "ChatMsg", "[暴毙数:{SCOREITEM=BE6_die}]§l§r[§1{SYSTEM}§r:§6{PING}ms§r]§r[{MODE}]§r[§5H§r:§5{HEALTH}/{HEALTH_MAX}§r]§r[§2L§r:§2{LEVEL}§r]§3{NAME} §r>> {MSG}"},
@@ -20,6 +21,7 @@ nlohmann::json ChatConfig = {
 };
 bool ChatFilter;
 bool ChatPrefix;
+bool WorldChat;
 string ChatMsg;
 string JoinMsg;
-string Version="1.1.5";
+string Version="1.1.6";

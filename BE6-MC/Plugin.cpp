@@ -13,8 +13,9 @@ void PluginInit()
 	logger.info("[Config][Chat]:{0}为 {1}", "聊天配置版本", ChatConfig["Version"]);
 	logger.info("[Config][Chat]:{0}设置为 {1}","聊天过滤",ChatFilter);
 	logger.info("[Config][Chat]:{0}设置为 {1}", "聊天前缀", ChatPrefix);
+	logger.info("[Config][Chat]:{0}设置为 {1}", "世界聊天", WorldChat);
 	logger.info("[Config][Chat]:{0}设置为 {1}", "聊天格式", ChatMsg);
 	logger.info("[Config][Chat]:{0}设置为 {1}", "进服提醒", JoinMsg);
 	LoadEvent();
-	Mqtt = MqttInit("BE6CLOUD/MQTT-test");
+	
 }

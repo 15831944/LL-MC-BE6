@@ -61,8 +61,9 @@ string getPlayerIP(string ip,int mode) {
 			return dz;
 		case 1:
 			return dz+":"+to_string(lag)+ ":" + to_string(lng);
+		default:
+			return dz;
 	}
-	
 }
 string getPlayerMode(GameType in) {
 	string s[4] = {

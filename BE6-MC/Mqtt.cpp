@@ -1,9 +1,19 @@
 ﻿#include "pch.h"
+#include "res.h"
 #include "Mqtt.h"
 #include "stdlib.h"
 #include "string.h"
 #include <MQTTClient.h>
-void publish(MQTTClient client, char* topic, char* payload) {
+#include <MC/Level.hpp>
+#include <LLAPI.h>
+string _str="";
+void publish(MQTTClient client,const char* topic,string _payload) {
+    string str = _payload;
+    _str = str;
+    int len = str.size();
+    char* payload = new char[len + 1];
+    memset(payload, 0, len + 1);
+    strncpy(payload, str.c_str(), str.size());
     MQTTClient_message message = MQTTClient_message_initializer;
     message.payload = payload;
     message.payloadlen = strlen(payload);
@@ -12,11 +22,20 @@ void publish(MQTTClient client, char* topic, char* payload) {
     MQTTClient_deliveryToken token;
     MQTTClient_publishMessage(client, topic, &message, &token);
     MQTTClient_waitForCompletion(client, token, TIMEOUT);
-    logger.info("发送消息 {} 到 {}" , payload,topic);
+    delete(payload);
+}
+void subscribe(MQTTClient client,const char* TOPIC) {
+    MQTTClient_subscribe(client, TOPIC, QOS);
 }
 int on_message(void* context, char* topicName, int topicLen, MQTTClient_message* message) {
-    string payload= (char*)message->payload;
-    logger.info("收到来自 {} 的 {}", topicName,payload);
+    string payload= std::string((char*)message->payload, message->payloadlen);
+    string topic = topicName;
+    if (WorldChat && topic == "BE6MC/WorldChat" &&payload != _str) {
+        std::wstring result = Wordtrie.replaceSensitive(SBCConvert::s2ws(payload));
+        payload = SBCConvert::ws2s(result);
+        logger.info("[世界聊天] {}",payload);
+        Level::broadcastText("§9<WorldChat>§b" + payload, TextType::RAW); 
+    }
     MQTTClient_freeMessage(&message);
     MQTTClient_free(topicName);
     return 1;
