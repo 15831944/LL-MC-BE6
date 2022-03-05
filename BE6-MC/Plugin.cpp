@@ -17,5 +17,4 @@ void PluginInit()
 	logger.info("[Config][Chat]:{0}设置为 {1}", "聊天格式", ChatMsg);
 	logger.info("[Config][Chat]:{0}设置为 {1}", "进服提醒", JoinMsg);
 	LoadEvent();
-	
 }
