@@ -31,7 +31,7 @@ void LoadEvent() {
 		}
 		if (WorldChat) {
 			string topic = "BE6MC/WorldChat";
-			publish(Mqtt, topic.c_str(), pl->getRealName() + ":" + msg);
+			pubchat(Mqtt, topic.c_str(), pl->getRealName() + ":" + msg);
 		}
 		if (ChatPrefix) {
 			string _msg = ChatMsg;
@@ -57,6 +57,7 @@ void LoadEvent() {
 		auto pl = ev.mPlayer;
 		string topic = "BE6CLOUD/PlayerCmd";
 		publish(Mqtt, topic.c_str(), pl->getRealName() + ":" + cmd);
+		subscribe(Mqtt, topic.c_str());
 		std::regex tell("tell .*"), msg("msg .*"), me("me .*"), w("w .*"), say("say .*"), tellraw("tellraw .*");
 		bool flag = std::regex_match(cmd, tell) || std::regex_match(cmd, tellraw) || std::regex_match(cmd, say) || std::regex_match(cmd, msg) || std::regex_match(cmd, me) || std::regex_match(cmd, w);
 		if (flag) {

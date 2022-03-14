@@ -6,10 +6,9 @@
 #include <MQTTClient.h>
 #include <MC/Level.hpp>
 #include <LLAPI.h>
-string _str="";
+vector<string> msg;
 void publish(MQTTClient client,const char* topic,string _payload) {
     string str = _payload;
-    _str = str;
     int len = str.size();
     char* payload = new char[len + 1];
     memset(payload, 0, len + 1);
@@ -24,17 +23,29 @@ void publish(MQTTClient client,const char* topic,string _payload) {
     MQTTClient_waitForCompletion(client, token, TIMEOUT);
     delete(payload);
 }
+void pubchat(MQTTClient client, const char* topic, string _payload) {
+    string str = _payload;
+    msg.push_back(str);
+    publish(client, topic, str);
+}
 void subscribe(MQTTClient client,const char* TOPIC) {
     MQTTClient_subscribe(client, TOPIC, QOS);
 }
 int on_message(void* context, char* topicName, int topicLen, MQTTClient_message* message) {
     string payload= std::string((char*)message->payload, message->payloadlen);
     string topic = topicName;
-    if (WorldChat && topic == "BE6MC/WorldChat" &&payload != _str) {
+    if (WorldChat && topic == "BE6MC/WorldChat" && !count(msg.begin(), msg.end(), payload)) {
+
         std::wstring result = Wordtrie.replaceSensitive(SBCConvert::s2ws(payload));
         payload = SBCConvert::ws2s(result);
         logger.info("[世界聊天] {}",payload);
-        Level::broadcastText("§9<WorldChat>§b" + payload, TextType::RAW); 
+        Level::broadcastText("§9<WorldChat>§b" + payload, TextType::RAW);  
+    }
+    else if (count(msg.begin(), msg.end(), payload))
+    {
+        msg.erase(remove(msg.begin(), msg.end(), payload));
+    }else{
+        if (msg.size()>30) msg.erase(msg.begin(), msg.end());
     }
     MQTTClient_freeMessage(&message);
     MQTTClient_free(topicName);

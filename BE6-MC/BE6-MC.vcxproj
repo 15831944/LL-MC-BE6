@@ -57,7 +57,7 @@
       <EnableUAC>false</EnableUAC>
       <DelayLoadDLLs>bedrock_server.dll</DelayLoadDLLs>
       <AdditionalLibraryDirectories>H:\MC_LL\MC_LL-BE6\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>paho-mqtt3c.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>if not exist $(SolutionDir)SDK\Lib\bedrock_server_api.lib goto process
@@ -89,6 +89,8 @@ LibraryBuilder.exe -o ..\Lib\
     <ClInclude Include="Mqtt.h" />
     <ClInclude Include="res.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource1.h" />
     <ClInclude Include="sbc_convert.h" />
     <ClInclude Include="Tools.h" />
     <ClInclude Include="trie.h" />
